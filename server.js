@@ -17,10 +17,6 @@ app.use(cors({ origin: '*' })); //For FCC testing purposes only
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-
-
-// ***************************************************** //
-// helmet 
 const helmet = require("helmet")
 
 app.use(
@@ -37,9 +33,6 @@ app.use(helmet.referrerPolicy({
   policy: ["same-origin"],
 }))
 
-
-// ***************************************************** //
-// to connect mongoose
 const mongoose = require('mongoose')
 mongoose.connect(process.env['DB'])
   .then(() => {
@@ -49,10 +42,6 @@ mongoose.connect(process.env['DB'])
     console.log('error', err)
   })
 
-
-// ***************************************************** //
-
-//Sample front-end
 app.route('/b/:board/')
   .get(function (req, res) {
     res.sendFile(process.cwd() + '/views/board.html');
@@ -62,26 +51,21 @@ app.route('/b/:board/:threadid')
     res.sendFile(process.cwd() + '/views/thread.html');
   });
 
-//Index page (static HTML)
 app.route('/')
   .get(function (req, res) {
     res.sendFile(process.cwd() + '/views/index.html');
   });
 
-//For FCC testing purposes
 fccTestingRoutes(app);
 
-//Routing for API 
 apiRoutes(app);
 
-//404 Not Found Middleware
 app.use(function (req, res, next) {
   res.status(404)
     .type('text')
     .send('Not Found');
 });
 
-//Start our server and tests!
 const listener = app.listen(process.env.PORT || 3000, function () {
   console.log('Your app is listening on port ' + listener.address().port);
   if (process.env.NODE_ENV === 'test') {
