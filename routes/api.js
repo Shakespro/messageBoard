@@ -6,6 +6,7 @@ module.exports = function (app) {
 
   app.route('/api/threads/:board')
     .post(async (req, res) => {
+      // POST ROUTE
       const { board } = req.params
       const { text, delete_password } = req.body
 
@@ -18,6 +19,7 @@ module.exports = function (app) {
       res.send(thread)
     })
     .get(async (req, res) => {
+      // GET ROUTE
       const { board } = req.params
       let threads = await Thread.find({ board }).sort("-bumped_on").populate("replies")
 
@@ -41,6 +43,7 @@ module.exports = function (app) {
       res.send(threads)
     })
     .delete(async (req, res) => {
+      // DELETE ROUTE
       const { board, thread_id, delete_password } = req.body
       let threadToDelete = await Thread.findById(thread_id)
       if (threadToDelete && threadToDelete.delete_password === delete_password) {
@@ -51,6 +54,7 @@ module.exports = function (app) {
       }
     })
     .put(async (req, res) => {
+      // PUT ROUTE
       const { board, thread_id } = req.body
       let threadToUpdate = await Thread.findById(thread_id)
       if (threadToUpdate) {
@@ -64,6 +68,7 @@ module.exports = function (app) {
 
   app.route('/api/replies/:board')
     .post(async (req, res) => {
+      // POST ROUTE
       const { board } = req.params
       const { text, delete_password, thread_id } = req.body
       let replyCreationTime = new Date()
@@ -80,6 +85,7 @@ module.exports = function (app) {
       res.send(threadToUpdate)
     })
     .get(async (req, res) => {
+      // GET ROUTE
       const { thread_id } = req.query
       let thread = await Thread.findById(thread_id).populate("replies")
 
@@ -99,6 +105,7 @@ module.exports = function (app) {
       res.send(threadToView)
     })
     .delete(async (req, res) => {
+      // DELETE ROUTE
       const { thread_id, reply_id, delete_password } = req.body
 
       let threadTarget = await Thread.findById(thread_id)
